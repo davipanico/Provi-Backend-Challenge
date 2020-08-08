@@ -14,7 +14,7 @@ signupRouter.post('/', async (request, response) => {
     const email = (request.body || {}).email;
     
     if(!email) {
-        response.status(406).json({message: 'Send a body with an \'email\' and attribute'})
+        response.status(406).json({message: 'Send a body with an \'email\' attribute'})
         return;
     };
 
