@@ -1,4 +1,5 @@
 const express = require('express')
+const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const { request, response } = require('express')
 const User  = require('../schemas/User')
@@ -31,9 +32,11 @@ signupRouter.post('/', async (request, response) => {
         return;
     }
 
+    const hashPassword = bcrypt.hashSync(password, 5)
     const token = uuid.v4();
     const newUser = new User({
         email: email,
+        password: hashPassword,
         token: token
     });
 
