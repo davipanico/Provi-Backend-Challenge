@@ -32,25 +32,45 @@ userRouter.put('/fullname/:id', async (request, response) => {
     await isAuth(request, response, 'GET /user');
 
     const id = request.params.id;
-    const userBody = request.body;
-    const name = userBody.infos.fullName.split(' ');
+    const fullName = request.body.infos.fullName
+    const name = fullName.split(' ');
     const firstName = name[0];
-    const lastName = userBody.infos.fullName.substring(name[0].length).trim();
-    userBody.infos.firstName = firstName
-    userBody.infos.lastName = lastName
+    const lastName = fullName.substring(name[0].length).trim();
 
-    if( userBody && Object.keys(userBody).length > 0 ) {
-        let documentUpdated = await User.updateOne({_id:id}, userBody);
+    if( fullName && firstName && lastName.length > 0 ) {
+        let documentUpdated = await User.updateOne({_id:id}, {'infos.fullName': fullName, 'infos.firstName': firstName, 'infos.lastName': lastName});
 
         if(documentUpdated.nModified > 0) {
-            response.status(200).json({message: "o documento foi atualizado com sucesso"})
+            response.status(200).json({message: "Sucess, Next end-point user/cpf"})
         }else {
-            response.status(500).json({message: "Não foi possível atualizar"})
+            response.status(500).json({message: "Failed"})
         }
     }
     else {
-        response.status(400).json({message: "Faltou o body"})
-}
-})
+        response.status(400).json({message: "Missing body"})
+    }
+});
+
+userRouter.put('/cpf/:id', async (request, response) => {
+    await isAuth(request, response, 'GET /user');
+
+    const id = request.params.id
+    const userBody = request.body
+
+    if( userBody && Object.keys(userBody).length > 0 ) {
+        let documentUpdated = await User.updateOne({_id:id}, {'infos.cpf': userBody.infos.cpf} );
+
+        if(documentUpdated.nModified > 0) {
+            response.status(200).json({message: "Sucess, next end-point user/birthday"})
+        }else {
+            response.status(500).json({message: "Failed"})
+        }
+    }
+    else {
+        response.status(400).json({message: "Missing body"})
+    }
+});
+
+userRouter.put('')
 
 module.exports = userRouter;
