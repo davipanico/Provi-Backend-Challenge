@@ -2,6 +2,7 @@ const express = require('express')
 const { request, response } = require('express')
 const  User = require('../schemas/User')
 const isAuth = require('../auth')
+const validator = require('../validator')
 
 const userRouter = express.Router()
 
@@ -37,6 +38,13 @@ userRouter.put('/fullname/:id', async (request, response) => {
     const firstName = name[0];
     const lastName = fullName.substring(name[0].length).trim();
 
+    const validator = await User.findOne({'infos.fullName': fullName})
+
+    if(validator) {
+        response.status(409).json({message: 'Data already registered'})
+        return false;
+    }
+
     if( fullName && firstName && lastName.length > 0 ) {
         let documentUpdated = await User.updateOne({_id:id}, {'infos.fullName': fullName, 'infos.firstName': firstName, 'infos.lastName': lastName});
 
@@ -56,6 +64,13 @@ userRouter.put('/cpf/:id', async (request, response) => {
 
     const id = request.params.id;
     const cpf = request.body.cpf;
+
+    const validator = await User.findOne({'infos.cpf': cpf})
+
+    if(validator) {
+        response.status(409).json({message: 'Data already registered'})
+        return false;
+    }
 
     if( cpf.length == 11) {
         let documentUpdated = await User.updateOne({_id:id}, {'infos.cpf': cpf} );
@@ -100,6 +115,13 @@ userRouter.put('/phone/:id', async (request, response) => {
 
     const id = request.params.id;
     const phone = request.body.phone;
+
+    const validator = await User.findOne({'infos.phone': phone})
+
+    if(validator) {
+        response.status(409).json({message: 'Data already registered'})
+        return false;
+    }
 
     if( phone.toString().length >= 10) {
         let documentUpdated = await User.updateOne({_id:id}, {'infos.phone': phone} );
