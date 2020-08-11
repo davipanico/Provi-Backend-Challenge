@@ -40,12 +40,16 @@ signupRouter.post('/', async (request, response) => {
         return;
     }
 
+    const date = new Date
+    const date2 = new Date(date.valueOf() - date.getTimezoneOffset() * 60000);
     const hashPassword = bcrypt.hashSync(password, 5)
     const token = uuid.v4();
     const newUser = new User({
         email: email,
         password: hashPassword,
-        token: token
+        token: token,
+        createdAt: date2,
+        updatedAt: date2
     });
 
     newUser.save()

@@ -2,7 +2,6 @@ const express = require('express')
 const { request, response } = require('express')
 const  User = require('../schemas/User')
 const isAuth = require('../auth')
-const validator = require('../validator')
 
 const userRouter = express.Router()
 
