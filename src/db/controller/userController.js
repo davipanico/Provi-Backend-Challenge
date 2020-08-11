@@ -5,6 +5,14 @@ const isAuth = require('../auth')
 
 const userRouter = express.Router()
 
+function dataGenerator () {
+    const date = new Date
+    const date2 = new Date(date.valueOf() - date.getTimezoneOffset() * 60000);
+    return date2
+}
+
+const date = dataGenerator()
+
 userRouter.get('/', async (request, response) => {
     await isAuth(request, response, 'GET /user');
 
@@ -40,12 +48,14 @@ userRouter.put('/fullname/:id', async (request, response) => {
     const validator = await User.findOne({'infos.fullName': fullName})
 
     if(validator) {
+        await User.updateOne({_id: id}, {updatedAt: date})
         response.status(409).json({message: 'Data already registered'})
         return false;
     }
 
     if( fullName && firstName && lastName.length > 0 ) {
-        let documentUpdated = await User.updateOne({_id:id}, {'infos.fullName': fullName, 'infos.firstName': firstName, 'infos.lastName': lastName});
+        const date = dataGenerator()
+        let documentUpdated = await User.updateOne({_id:id}, {'infos.fullName': fullName, 'infos.firstName': firstName, 'infos.lastName': lastName, updatedAt: date});
 
         if(documentUpdated.nModified > 0) {
             response.status(200).json({message: "Sucess, Next end-point user/cpf"})
@@ -67,12 +77,13 @@ userRouter.put('/cpf/:id', async (request, response) => {
     const validator = await User.findOne({'infos.cpf': cpf})
 
     if(validator) {
+        await User.updateOne({_id: id}, {updatedAt: date})
         response.status(409).json({message: 'Data already registered'})
         return false;
     }
 
     if( cpf.length == 11) {
-        let documentUpdated = await User.updateOne({_id:id}, {'infos.cpf': cpf} );
+        let documentUpdated = await User.updateOne({_id:id}, {'infos.cpf': cpf, updatedAt: date} );
 
         if(documentUpdated.nModified > 0) {
             response.status(200).json({message: "Sucess, next end-point user/birthday"});
@@ -95,7 +106,7 @@ userRouter.put('/birthday/:id', async (request, response) =>{
     const birthday = day + '/' + month + '/' + year;
 
     if( birthday.length == 10) {
-        let documentUpdated = await User.updateOne({_id:id}, {'infos.birthday': birthday} );
+        let documentUpdated = await User.updateOne({_id:id}, {'infos.birthday': birthday, updatedAt: date} );
 
         if(documentUpdated.nModified > 0) {
             response.status(200).json({message: "Sucess, next end-point user/phone"});
@@ -118,12 +129,13 @@ userRouter.put('/phone/:id', async (request, response) => {
     const validator = await User.findOne({'infos.phone': phone})
 
     if(validator) {
+        await User.updateOne({_id: id}, {updatedAt: date})
         response.status(409).json({message: 'Data already registered'})
         return false;
     }
 
     if( phone.toString().length >= 10) {
-        let documentUpdated = await User.updateOne({_id:id}, {'infos.phone': phone} );
+        let documentUpdated = await User.updateOne({_id:id}, {'infos.phone': phone, updatedAt: date} );
 
         if(documentUpdated.nModified > 0) {
             response.status(200).json({message: "Sucess, next end-point user/addres"});
@@ -165,7 +177,8 @@ userRouter.put('/addres/:id', async (request, response) => {
             'infos.addres.number': number,
             'infos.addres.complement': complement,
             'infos.addres.city': city,
-            'infos.addres.state': state
+            'infos.addres.state': state,
+            updatedAt: date
         });
 
         if(documentUpdated.nModified > 0) {
