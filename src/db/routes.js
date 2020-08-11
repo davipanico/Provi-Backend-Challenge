@@ -4,7 +4,7 @@ const signupController = require('./controller/signupController')
 
 const router = express.Router();
 
-router.use('/index', userController)
+router.use('/user', userController)
 router.use('/signup', signupController)
 
 module.exports = router;

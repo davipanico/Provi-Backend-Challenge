@@ -8,7 +8,15 @@ const User  = require('../schemas/User')
 const signupRouter = express.Router()
 
 signupRouter.get('/', (request, response) => {
-    response.status(200).json({message: 'Send a POST with an \'email\' attribute in its body'})
+    response.status(405).json({message: 'Method not allowed'})
+})
+
+signupRouter.put('/', (request, response) => {
+    response.status(405).json({message: 'Method not allowed'})
+})
+
+signupRouter.delete('/', (request, response) => {
+    response.status(405).json({message: 'Method not allowed'})
 })
 
 signupRouter.post('/', async (request, response) => {

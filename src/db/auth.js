@@ -1,3 +1,5 @@
+const User = require('./schemas/User')
+
 async function isAuth (request, response, url) {
     const token = request.header('Token');
     const user = await User.findOne({ token });
