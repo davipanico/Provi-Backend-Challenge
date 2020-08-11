@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
         birthday: {type: String},
         phone: {type: Number},
         addres: {
-            cep: {type: Number},
+            cep: {type: String},
             street: {type: String},
             number: {type: Number},
             complement: {type: String},
