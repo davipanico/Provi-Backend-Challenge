@@ -2,6 +2,7 @@ const express = require('express')
 const { request, response } = require('express')
 const  User = require('../schemas/User')
 const isAuth = require('../auth')
+const verifyCpf = require('../../cpfvalidator')
 
 const userRouter = express.Router()
 
@@ -73,6 +74,13 @@ userRouter.put('/cpf/:id', async (request, response) => {
 
     const id = request.params.id;
     const cpf = request.body.cpf;
+    
+    const checkCPF = verifyCpf(cpf)
+
+    if(checkCPF == false) {
+        response.status(400).json({message: 'Invalid CPF number'})
+        return false
+    }
 
     const validator = await User.findOne({'infos.cpf': cpf})
 
