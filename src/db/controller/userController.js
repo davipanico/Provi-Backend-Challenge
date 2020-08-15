@@ -1,18 +1,18 @@
 const express = require('express')
 const { request, response } = require('express')
+
 const  User = require('../schemas/User')
+
 const isAuth = require('../auth')
-const verifyCpf = require('../../cpfvalidator')
+const verifyCpf = require('../../components/cpfCheck')
+const dataGenerator = require('../../components/dateGenerator')
+const cepCheck = require('../../components/cepCheck')
+
+const date = dataGenerator()
 
 const userRouter = express.Router()
 
-function dataGenerator () {
-    const date = new Date
-    const date2 = new Date(date.valueOf() - date.getTimezoneOffset() * 60000);
-    return date2
-}
 
-const date = dataGenerator()
 
 userRouter.get('/', async (request, response) => {
     await isAuth(request, response, 'GET /user');
@@ -168,7 +168,31 @@ userRouter.put('/addres/:id', async (request, response) => {
     const city = request.body.city;
     const state = request.body.state;
 
-    if(cep.length != 8) {
+    cepCheck(cep, street, city)
+        .then(async (res) => {
+            console.log(res)
+            if(res == false) {
+                    response.status(500).json({message: "Failed"});
+                };
+
+                let documentUpdated = await User.updateOne({_id:id}, {
+                    'infos.addres.cep': cep,
+                    'infos.addres.street': street,
+                    'infos.addres.number': number,
+                    'infos.addres.complement': complement,
+                    'infos.addres.city': city,
+                    'infos.addres.state': state,
+                    updatedAt: date
+                });
+                if(documentUpdated.nModified > 0) {
+                    response.status(200).json({message: "Sucess"});
+                }
+        })
+        .catch(() => {
+            response.status(400).json({message: "Missing some information o body"});
+    });
+
+    /*if(cep.length != 8) {
         response.status(400).json({message: "Cep must contain 8 numbers"});
     }
 
@@ -197,7 +221,7 @@ userRouter.put('/addres/:id', async (request, response) => {
     }
     else {
         response.status(400).json({message: "Missing some information o body"});
-    }
+    }*/
 
 });
 
