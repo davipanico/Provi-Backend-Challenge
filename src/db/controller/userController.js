@@ -10,6 +10,8 @@ const cepCheck = require('../../components/cepCheck')
 
 const date = dataGenerator()
 
+let = onboardingStep = ''
+
 const userRouter = express.Router()
 
 
@@ -35,6 +37,43 @@ userRouter.get('/', async (request, response) => {
     };
         
     response.status(200).json(result);
+});
+
+userRouter.put('/cpf/:id', async (request, response) => {
+    await isAuth(request, response, 'GET /user');
+
+    const id = request.params.id;
+    const cpf = request.body.cpf;
+
+    await User.updateOne({_id: id}, {onboardingStep: 'CPF'})
+    
+    const checkCPF = verifyCpf(cpf)
+
+    if(checkCPF == false) {
+        response.status(400).json({message: 'Invalid CPF number'})
+        return false
+    }
+
+    const validator = await User.findOne({'infos.cpf': cpf})
+
+    if(validator) {
+        await User.updateOne({_id: id}, {updatedAt: date})
+        response.status(409).json({message: 'Data already registered'})
+        return false;
+    }
+
+    if( cpf.length == 11) {
+        let documentUpdated = await User.updateOne({_id:id}, {'infos.cpf': cpf, updatedAt: date} );
+
+        if(documentUpdated.nModified > 0) {
+            response.status(200).json({message: "Sucess, next end-point user/birthday"});
+        }else {
+            response.status(500).json({message: "Failed"});
+        }
+    }
+    else {
+        response.status(400).json({message: "CPF must contain 11 numbers"});
+    }
 });
 
 userRouter.put('/fullname/:id', async (request, response) => {
@@ -66,41 +105,6 @@ userRouter.put('/fullname/:id', async (request, response) => {
     }
     else {
         response.status(400).json({message: "Missing body"})
-    }
-});
-
-userRouter.put('/cpf/:id', async (request, response) => {
-    await isAuth(request, response, 'GET /user');
-
-    const id = request.params.id;
-    const cpf = request.body.cpf;
-    
-    const checkCPF = verifyCpf(cpf)
-
-    if(checkCPF == false) {
-        response.status(400).json({message: 'Invalid CPF number'})
-        return false
-    }
-
-    const validator = await User.findOne({'infos.cpf': cpf})
-
-    if(validator) {
-        await User.updateOne({_id: id}, {updatedAt: date})
-        response.status(409).json({message: 'Data already registered'})
-        return false;
-    }
-
-    if( cpf.length == 11) {
-        let documentUpdated = await User.updateOne({_id:id}, {'infos.cpf': cpf, updatedAt: date} );
-
-        if(documentUpdated.nModified > 0) {
-            response.status(200).json({message: "Sucess, next end-point user/birthday"});
-        }else {
-            response.status(500).json({message: "Failed"});
-        }
-    }
-    else {
-        response.status(400).json({message: "CPF must contain 11 numbers"});
     }
 });
 
@@ -172,7 +176,7 @@ userRouter.put('/addres/:id', async (request, response) => {
         .then(async (res) => {
             console.log(res)
             if(res == false) {
-                    response.status(500).json({message: "Failed"});
+                    response.status(500).json({message: "Failed, some information are incorrect"});
                 };
 
                 let documentUpdated = await User.updateOne({_id:id}, {
@@ -185,44 +189,34 @@ userRouter.put('/addres/:id', async (request, response) => {
                     updatedAt: date
                 });
                 if(documentUpdated.nModified > 0) {
-                    response.status(200).json({message: "Sucess"});
+                    response.status(200).json({message: "Sucess, next end-point user/amount-requested"});
                 }
         })
         .catch(() => {
-            response.status(400).json({message: "Missing some information o body"});
+            response.status(400).json({message: "Missing some information on body"});
     });
 
-    /*if(cep.length != 8) {
-        response.status(400).json({message: "Cep must contain 8 numbers"});
-    }
+});
 
-    if(city && state && street.length <= 0) {
-        response.status(400).json({message: "City, State and Stret, can not be empty."});
-    }
+userRouter.put('/amount-requested/:id', async (request, response) => {
+    await isAuth(request, response, 'GET /user');
 
-    let check = true
+    const id = request.params.id;
+    const amount = request.body.amount;
+    const amountInCents = (amount * 100).toFixed(3)
 
-    if (check == true){
-        let documentUpdated = await User.updateOne({_id:id}, {
-            'infos.addres.cep': cep,
-            'infos.addres.street': street,
-            'infos.addres.number': number,
-            'infos.addres.complement': complement,
-            'infos.addres.city': city,
-            'infos.addres.state': state,
-            updatedAt: date
-        });
+    if(amountInCents > 0){
+
+        let documentUpdated = await User.updateOne({_id: id}, {amountRequested: amountInCents})
 
         if(documentUpdated.nModified > 0) {
-            response.status(200).json({message: "Sucess"});
+            response.status(200).json({message: 'Sucess, go to /user to see your informations'})
         }else {
-            response.status(500).json({message: "Failed"});
+            response.status(409).json({message: 'Failed'})
         }
+    }else {
+        response.status(400).json({message: "Missing some information on body or amount must be greater than 0"});
     }
-    else {
-        response.status(400).json({message: "Missing some information o body"});
-    }*/
-
 });
 
 module.exports = userRouter;

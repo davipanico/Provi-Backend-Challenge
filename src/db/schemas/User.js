@@ -20,6 +20,8 @@ const userSchema = new mongoose.Schema({
             state: {type: String}
         }
     },
+    amountRequested: {type: Number},
+    onboardingStep: {type: String},
     createdAt: {type: Date},
     updatedAt: {type: Date}
 });
