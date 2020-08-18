@@ -10,13 +10,11 @@ const cepCheck = require('../../components/cepCheck')
 
 const date = dataGenerator()
 
-let = onboardingStep = ''
-
 const userRouter = express.Router()
 
 
 
-userRouter.get('/', async (request, response) => {
+userRouter.get('/index', async (request, response) => {
     await isAuth(request, response, 'GET /user');
 
     const limit = parseInt(request.query.limit);
