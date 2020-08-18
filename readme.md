@@ -85,7 +85,7 @@ Here you will register the phone number of the user, you need to pass the DDD to
 
 user/addres/:id (pass id of the user you want to edit as params on url)</br>
 **type**: PUT</br>
-**body**: "cep" (String), "street" (String), "number": (Number), "complement": (String), "city": (String), "state": (String).
+**body**: "cep" (String), "street" (String), "number": (Number), "complement": (String), "city": (String), "state": (String).</br>
 **body type**: JSON</br>
 **example**: {"cep": "04052050", "street": "Rua Orissanga", "number": 0, "complement": "apto 0", "city": "São Paulo", "state": "São Paulo"}.
 
