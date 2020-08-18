@@ -1,23 +1,30 @@
-Provi Node.js Challenge
+# Provi Node.js Challenge
 
-Background
+<p align="center">
+ <a href="#background">Background</a> •
+ <a href="#objective">Objective</a> • 
+ <a href="#tecnology">Tecnology</a> • 
+ <a href="#how to use">How to Use</a> • 
+</p>
+
+# Background
 
 Provi is a fintech that offers loans for educational purposes without guarantees for individuals. Our goal is promote specialized education for brazilians to get qualified and reach their dream. We finance courses and specializations for designers, developers, data scientists, digital marketers, etc.
 
-Objective
+# Objective
 
 This API has the objective of create a new user with email & password and register some informations about it, like: Name, Addres, CPF, Phone Number and Amount Of Loan. All this data will be saved in a noSQL database. All the data will be in worked in JSON.
 
-Tecnology
+# Tecnology
 
-Express 
-Axios
-Bcrypt (To encrypt the password)
-Nodemon
-Mongoose
-Uuid (To generate a token for user)
+- Express 
+- Axios
+- Bcrypt (To encrypt the password)
+- Nodemon
+- Mongoose
+- Uuid (To generate a token for user)
 
-How to use
+# How to use
 
 First you need to clone this repo
  - https://github.com/davipanico/Provi-Backend-Challenge.git
