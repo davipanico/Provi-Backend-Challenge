@@ -37,11 +37,11 @@ Then start the API
 
 End Points
 
-/signup
-type: POST
-Body: "Email" (String), "Password" (String).
-Body Type: "JSON"
-Example: {"Email": "davi@provi.com", "Password": "123"}
+/signup</br>
+type: POST</br>
+Body: "Email" (String), "Password" (String).</br>
+Body Type: "JSON"</br>
+Example: {"Email": "davi@provi.com", "Password": "123"}</br>
 
 Here will be your entry point at API. You need to pass at body your e-mail and a password, and the API will generate a token for you and return on the response. You will use the token to send requests across the API, to do that you need to add a new Key to requisition header with 'Token' name and, the token as value just like the image above (Postman).
 
