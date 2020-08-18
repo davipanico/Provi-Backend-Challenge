@@ -13,7 +13,7 @@ Provi is a fintech that offers loans for educational purposes without guarantees
 
 # Objective
 
-This API has the objective of create a new user with email & password and register some informations about it, like: Name, Addres, CPF, Phone Number and Amount Of Loan. All this data will be saved in a noSQL database. All the data will be in worked in JSON.
+This API has the objective of create a new user with email & password and register some informations about it, like: Name, Addres, CPF, Phone Number and Amount Of Loan. All this data will be saved in a **noSQL** database. All the data will be in worked in **JSON**.
 
 # Tecnology
 
@@ -38,10 +38,10 @@ Then start the API
 End Points
 
 /signup</br>
-type: POST</br>
-Body: "Email" (String), "Password" (String).</br>
-Body Type: "JSON"</br>
-Example: {"Email": "davi@provi.com", "Password": "123"}</br>
+**type**: POST</br>
+**Body**: "Email" (String), "Password" (String).</br>
+**Body Type**: "JSON"</br>
+**Example**: {"Email": "davi@provi.com", "Password": "123"}</br>
 
 Here will be your entry point at API. You need to pass at body your e-mail and a password, and the API will generate a token for you and return on the response. You will use the token to send requests across the API, to do that you need to add a new Key to requisition header with 'Token' name and, the token as value just like the image above (Postman).
 
@@ -85,7 +85,7 @@ Here you will register the phone number of the user, you need to pass the DDD to
 
 user/addres/:id (pass id of the user you want to edit as params on url)</br>
 type: PUT</br>
-body: "cep" (String),</br> "street" (String),</br> "number": (Number),</br> "complement": (String),</br> "city": (String),</br> "state": (String).</br>
+body: "cep" (String), "street" (String), "number": (Number), "complement": (String), "city": (String), "state": (String).
 body type: JSON</br>
 example: {"cep": "04052050", "street": "Rua Orissanga", "number": 0, "complement": "apto 0", "city": "São Paulo", "state": "São Paulo"}.
 
