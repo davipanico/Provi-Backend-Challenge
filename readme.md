@@ -43,7 +43,7 @@ End Points
 **Body Type**: "JSON"</br>
 **Example**: {"Email": "davi@provi.com", "Password": "123"}</br>
 
-Here will be your entry point at API. You need to pass at body your e-mail and a password, and the API will generate a token for you and return on the response. You will use the token to send requests across the API, to do that you need to add a new Key to requisition header with 'Token' name and, the token as value just like the image above (Postman).
+Here will be your entry point at API. You need to pass at body your e-mail and a password, and the API will generate a token for you and return on the response. You will use the token to send requests across the API, to do that you need to add a new Key to requisition header with 'Token' name and, the token as value just like the image below (Postman).
 ![alt text](https://i.imgur.com/9eV0mZi.png)
 
 user/index</br>
